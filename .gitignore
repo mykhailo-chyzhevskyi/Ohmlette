@@ -1,0 +1,17 @@
+.gradle/
+.gradle-user-home/
+.idea/
+.kotlin/
+local.properties
+**/build/
+*.iml
+backend/.venv/
+backend/storage/
+backend/__pycache__/
+backend/sample.pdf
+backend/sample-card.json
+*.aux
+*.log
+*.synctex.gz
+*.toc
+*.out

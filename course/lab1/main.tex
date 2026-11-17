@@ -1,0 +1,149 @@
+\documentclass[14pt,a4paper]{extarticle}
+\pagestyle{empty}
+\usepackage{fontspec}
+\usepackage{polyglossia}
+\setmainlanguage{ukrainian}
+\IfFontExistsTF{Times New Roman}{\setmainfont{Times New Roman}\newfontfamily\ukrainianfont{Times New Roman}}{\setmainfont{Libertinus Serif}\newfontfamily\ukrainianfont{Libertinus Serif}}
+\IfFontExistsTF{Courier New}{\setmonofont{Courier New}\newfontfamily\ukrainianfonttt{Courier New}}{\setmonofont{DejaVu Sans Mono}\newfontfamily\ukrainianfonttt{DejaVu Sans Mono}}
+\usepackage[top=20mm,bottom=20mm,left=25mm,right=15mm]{geometry}
+\usepackage{setspace}
+\onehalfspacing
+\usepackage{indentfirst}
+\setlength{\parindent}{1.25cm}
+\setlength{\parskip}{0pt}
+\usepackage{graphicx,float,caption,enumitem,titlesec}
+\usepackage{tikz}
+\usetikzlibrary{arrows.meta,positioning}
+\graphicspath{{images/}{./}}
+\captionsetup{font=it,justification=centering}
+\setlist[enumerate]{label=\arabic*.,leftmargin=1.25cm,itemsep=0.3em}
+\titleformat{\section}{\normalfont\normalsize\bfseries\centering}{\thesection.}{0.5em}{}
+\titlespacing*{\section}{0pt}{1.2\baselineskip}{0.7\baselineskip}
+\newcommand{\shot}[2]{%
+	\begin{figure}[H]\centering
+		\IfFileExists{images/#1.png}{\includegraphics[width=1\textwidth,height=1\textheight,keepaspectratio]{images/#1.png}}{%
+			\IfFileExists{images/#1.jpg}{\includegraphics[width=0.4\textwidth,height=0.36\textheight,keepaspectratio]{images/#1.jpg}}{%
+				\IfFileExists{images/#1.jpeg}{\includegraphics[width=0.78\textwidth,height=0.43\textheight,keepaspectratio]{images/#1.jpeg}}{%
+					\fbox{\begin{minipage}[c][6cm][c]{0.85\textwidth}\centering
+							Місце для скріншота\\[0.5cm]\texttt{\detokenize{images/#1.png}}\\[0.3cm]
+							#2\end{minipage}}}}}
+		\caption{#2}\label{fig:#1}\end{figure}}
+\begin{document}
+	\begin{titlepage}
+		\begin{center}
+			Міністерство освіти і науки України
+
+			Національний університет «Львівська політехніка»
+
+			\vspace{0.7cm}
+			\IfFileExists{logo.png}{\includegraphics[width=0.9\textwidth,height=7cm,keepaspectratio]{logo.png}}{\fbox{\begin{minipage}[c][3cm][c]{0.4\textwidth}\centering Логотип університету\end{minipage}}}
+
+			\vspace{1cm}
+			\textbf{Звіт до лабораторної роботи №1}
+
+			з дисципліни
+
+			«Програмування мобільних додатків»
+
+			на тему
+
+			«Налаштування середовища та концепція додатку»
+			\vspace{1.5cm}
+		\end{center}
+		\begin{flushright}
+			Виконав:\\студент групи АП-41\\Чижевський М. М.\\[1cm]
+			Прийняв:\\доц. каф. ІКТ, докт. ф.\\Андрущак В. С.
+		\end{flushright}
+		\vfill
+		\begin{center}Львів 2026\end{center}
+	\end{titlepage}
+
+	\section*{Мета роботи}
+Ознайомитися з Android Studio, налаштувати середовище розробки та обрати тему власного Android-додатка.
+
+\section{Налаштування середовища}
+Для роботи я використав Android Studio Rabbit 1 (2026.2.1) на Windows 11. Створив проєкт за шаблоном Empty Activity, обрав Kotlin та Jetpack Compose. Під час налаштування встановив Android SDK і компоненти для запуску емулятора.
+
+У Device Manager налаштував віртуальний пристрій для перевірки базового проєкту. Для запуску на смартфоні увімкнув режим розробника та налагодження. Скріншоти запуску наведено нижче.
+\shot{s1_lab1}{Базовий проєкт на емуляторі}
+\shot{s2_lab1}{Базовий проєкт на смартфоні}
+
+\section{Вибір галузі}
+Я обрав електроніку. Під час роботи зі схемами мені часто потрібно підібрати номінал резистора, перевірити частоту зрізу фільтра або перевести одиниці. Тому вирішив зробити калькулятор, у якому ці інструменти будуть зібрані разом і працюватимуть без інтернету.
+
+\section{Ідея додатка}
+Назва додатка — \textbf{Ohmlette}. Основна версія призначена для Android, пізніше планується версія для ПК.
+
+Користувач обирає розрахунок, вводить параметри й отримує результат із формулою. Почну з одиниць, номіналів, резисторних мереж і RC-фільтрів. Для автопідбору резисторів передбачено максимум шість компонентів із можливістю змішаного з'єднання.
+
+Ще планую додати читання даташитів за допомогою локальної AI-моделі. Користувач завантажить PDF і вкаже артикул, а додаток складе українську картку компонента з параметрами, умовами та посиланнями на сторінки. Почну з діодів, резисторів, конденсаторів і дроселів. Модель можна буде завантажити в додатку, після чого обробка працюватиме без інтернету.
+
+Щоб уточнити набір функцій, я обговорив ідею з AI. Фрагмент діалогу:
+\begin{quote}
+\textbf{Запит:} «Автопідбір резисторів: ну я думаю можна обмежити кількість компонентів до шести».
+
+\textbf{Відповідь:} «До шести резисторів — розумна межа автопідбору. Змішані послідовно-паралельні схеми залишаємо».
+\end{quote}
+Я залишив функції, якими користувався б сам, а розрахунки для АЦП/ЦАП та операційних підсилювачів прибрав.
+
+\section{Вимоги та структура додатка}
+Основні функції:
+\begin{enumerate}
+\item Арифметичні дії та перерахунок одиниць із префіксами від піко до гіга.
+\item Пошук найближчих номіналів E12, E24 та E96.
+\item Розрахунок послідовно-паралельних резисторних мереж.
+\item Визначення меж опору з урахуванням допусків.
+\item Розрахунок RC-фільтрів і побудова АЧХ.
+\item Розшифрування маркування резисторів і конденсаторів.
+\item Розрахунок з'єднань конденсаторів, перерахунок частоти, періоду та фази.
+\item Збереження історії розрахунків.
+\end{enumerate}
+
+Для структури додатка я обрав MVVM. Введення даних і результати будуть на екранах Compose, а обчислення — в окремих модулях. ViewModel зв'язуватиме екран із потрібним розрахунком. Історію зберігатиму на пристрої. Так формули можна буде перевіряти окремо та використати у версії для ПК.
+
+\begin{figure}[H]
+	\centering
+	\begin{tikzpicture}[
+		scale=0.88,
+		transform shape,
+		box/.style={draw=black!60,rounded corners=3pt,line width=0.6pt,
+			align=center,inner sep=9pt,font=\small,text width=3.8cm,
+			minimum height=1.8cm,fill=black!3},
+		main/.style={box,text width=10.5cm,minimum height=1.3cm},
+		flow/.style={<->,>=Latex,line width=0.7pt,draw=black!70}
+		]
+		\node[main] (ui) {\textbf{Інтерфейс · Jetpack Compose}\\Каталог інструментів, параметри та результати};
+		\node[main,below=0.65cm of ui] (vm) {\textbf{ViewModel}\\Стан екрана, перевірка введення та запуск операцій};
+		\node[box,below=1cm of vm] (ai) {\textbf{AI-даташити}\\PDF $\to$ локальна модель\\$\to$ картка компонента};
+		\node[box,left=0.35cm of ai] (calc) {\textbf{Розрахунки}\\Компоненти, сигнали,\\датчики, RF та PCB};
+		\node[box,right=0.35cm of ai] (store) {\textbf{Локальні дані}\\Історія, картки,\\PDF та налаштування};
+		\node[main,below=0.7cm of ai,minimum height=1.1cm] (core) {\textbf{Спільне ядро Kotlin}\\Величини, одиниці та математичні функції};
+		\draw[flow] (ui) -- (vm);
+		\draw[flow] (vm.south -| calc.north) -- (calc.north);
+		\draw[flow] (vm) -- (ai);
+		\draw[flow] (vm.south -| store.north) -- (store.north);
+		\draw[flow] (calc.south) -- (calc.south |- core.north);
+	\end{tikzpicture}
+	\caption{Концептуальна структура Ohmlette}
+\end{figure}
+
+\section{Git-репозиторій}
+Публічний репозиторій проєкту:
+\begin{center}
+\small\texttt{https://github.com/mykhailo-chyzhevskyi/Ohmlette}
+\end{center}
+У репозиторії зберігатимуться код проєкту та README.md. Вміст README:
+
+\begin{quote}
+\textbf{Ohmlette}
+
+Офлайн-калькулятор електронного інженера для Android.
+
+Можливості: одиниці, стандартні номінали, резисторні мережі та допуски, RC-фільтри, маркування компонентів, з'єднання конденсаторів, історія розрахунків.
+
+Технології: Kotlin, Jetpack Compose, MVVM.
+\end{quote}
+
+\section*{Висновок}
+Під час роботи я налаштував середовище розробки й обрав тему додатка Ohmlette. Визначив, які розрахунки додам першими та як організую код. Спочатку планую реалізувати перерахунок одиниць і підбір номіналів, а потім додати інші розрахунки.
+\end{document}
